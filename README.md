@@ -77,7 +77,9 @@ Once your ODBC connection is configured and you are able to successfully test th
 Run `rails server` and navigate to http://localhost:3000/. 
 
 `Ctrl-C` to shutdown server.
+
 ***
+
 ### For LDAP authentication:
 - Run `rails g controller Welcome index`
 - Set `root` in ***config/routes.rb*** to `'welcome#index'`
@@ -107,7 +109,9 @@ development:
   ssl: false
   # <<: *AUTHORIZATIONS
 ```
+
 ***
+
 ### To modify LDAP authentication to accept username:
 - Open ***app/views/devise/sessions/new.html.erb*** and change
 ```html
@@ -126,7 +130,9 @@ to
     - Change `config.ldap_use_admin_to_bind` to equal `true` so the admin user will be used to bind to the LDAP server during authentication.
 - Run `rails generate migration add_username_to_users username:string:uniq` to create a migration to add a username column to the users table.
 - Run `rake db:migrate` to update the database with the migration.
+
 ***
+
 ### Create Sign In/Out links:
 - Create partial `_login_items.html.erb` in directory ***app/views/devise/shared/*** with the following:
 ```r
@@ -141,7 +147,9 @@ to
 <% end %>
 ```
 - In ***app/views/layouts/application.html.erb***, add `<%= render 'devise/shared/login_items' %>` above `<%= yield %>` to display the sign in/out links.
+
 ***
+
 ### Add Bootstrap styling & Font Awesome icons:
 - In directory ***app/assets/stylesheets/***, rename file ***application.css*** to ***application.css.scss***.
 - Add the following to ***application.css.scss***:
@@ -176,7 +184,6 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 </nav>
 ```
 - Place your brand image under ***app/assets/images/***.
-***
 
 [RailsInstaller]:http://railsinstaller.org/en
 [ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
