@@ -1,7 +1,4 @@
 # **Triple-Stack**
-***
-***
-***
 
 ### How to build this application from scratch:
 
@@ -178,7 +175,7 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
   	</ul>
 </nav>
 ```
-    - Place your brand image under ***app/assets/images/***.
+- Place your brand image under ***app/assets/images/***.
 ***
 
 [RailsInstaller]:http://railsinstaller.org/en
