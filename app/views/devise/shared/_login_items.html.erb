@@ -1,0 +1,15 @@
+<nav class="navbar navbar-default" role="navigation">
+	<%= link_to image_tag('stacker.png', size: '25x20'), '#', class: 'navbar-brand atn-logo' %>
+  	<%= link_to 'Triple Stack', root_path, class: 'navbar-brand' %>
+	<ul class="nav navbar-nav pull-right">
+		<% if user_signed_in? %>
+		  <li>
+		  <%= link_to('Sign Out', destroy_user_session_path, :method => :delete) %>        
+		  </li>
+		<% else %>
+		  <li>
+		  <%= link_to('Sign In', new_user_session_path)  %>  
+		  </li>
+		<% end %>
+  	</ul>
+</nav>
