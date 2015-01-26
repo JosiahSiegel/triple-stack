@@ -26,6 +26,7 @@ gem 'ruby-odbc'
 gem 'activerecord-sqlserver-adapter'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
+gem 'schema_to_scaffold'
 
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'font-awesome-rails'
