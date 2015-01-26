@@ -13,7 +13,7 @@ You will see the error " **Could not load 'active_record/connection_adapters/sql
 
 `Ctrl-C` to shutdown server.
 
-Open your Gemfile and remove `gem 'sqlite3'` and add the following gems:
+Open your Gemfile, remove `gem 'sqlite3'`, and add the following gems:
 ```ruby
 gem 'tiny_tds'
 gem 'ruby-odbc'
@@ -184,22 +184,33 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 - Modify `_login_items.html.erb` in ***app/views/devise/shared/*** to:
 ```r
 <nav class="navbar navbar-default" role="navigation">
-	<%= link_to image_tag('stacker.png', size: '25x20'), '#', class: 'navbar-brand' %>
+  <%= link_to image_tag('stacker.png', size: '25x20'), '#', class: 'navbar-brand' %>
     <%= link_to 'Triple Stack', root_path, class: 'navbar-brand' %>
-	<ul class="nav navbar-nav pull-right">
-		<% if ldap_user_signed_in? %>
-		  <li>
-		  <%= link_to('Sign Out', destroy_ldap_user_session_path, :method => :delete) %>        
-		  </li>
-		<% else %>
-		  <li>
-		  <%= link_to('Sign In', new_ldap_user_session_path)  %>  
-		  </li>
-		<% end %>
-  	</ul>
+  <ul class="nav navbar-nav pull-right">
+    <% if ldap_user_signed_in? %>
+      <li>
+      <%= link_to('Sign Out', destroy_ldap_user_session_path, :method => :delete) %>        
+      </li>
+    <% else %>
+      <li>
+      <%= link_to('Sign In', new_ldap_user_session_path)  %>  
+      </li>
+    <% end %>
+    </ul>
 </nav>
 ```
 - Place your brand image under ***app/assets/images/***.
+
+***
+
+### Build on a preexisting database:
+- Open your Gemfile and add `gem 'schema_to_scaffold'`
+- Run `bundle install`
+- Run `scaffold`
+- When prompted, enter the path of your schema that was populated after running `rake db:migrate`:
+  - `app/db/schema.rb`
+- When prompted, designate the tables that you want scaffolding generated for.
+- Scripts will be generated that you can copy and run to build the necessary scaffolding.
 
 [RailsInstaller]:http://railsinstaller.org/en
 [ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
