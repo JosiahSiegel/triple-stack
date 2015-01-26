@@ -89,7 +89,7 @@ Run `rails server` and navigate to http://localhost:3000/.
 - Add the following between `<body></body>` tags in ***app/views/layouts/application.html.erb***:
     - `<p class="notice"><%= notice %></p>`
     - `<p class="alert"><%= alert %></p>`
-- Run `rails generate devise User`
+- Run `rails generate devise User`. `User` may be replaced with any model name. May be necessary if your db already contains a 'users' table.
 - Run `rails generate devise_ldap_authenticatable:install`
 - Run `rails g devise:views`
 - Run `bin/rake db:migrate` to update the database
