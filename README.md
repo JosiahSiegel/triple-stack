@@ -123,6 +123,7 @@ to
 <%= f.label :username %><br />
 <%= f.text_field :username, autofocus: true %>
 ```
+- Note email_field became text_field to disable email authentication.
 - Modify the user model to populate the user's email and to no longer require it for validation:
 ```ruby
 before_validation:get_ldap_email
@@ -140,7 +141,6 @@ def email_changed?
   false
 end
 ```
-- Note email_field became text_field to disable email authentication.
 - Open ***config/initializers/devise.rb***
     - Change `config.authentication_keys` to equal `[ :username ]`
     - Change `config.ldap_create_user` to equal `true` so all valid LDAP users will be allowed to login and an appropriate user record will be created.
