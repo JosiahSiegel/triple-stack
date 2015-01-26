@@ -83,17 +83,16 @@ Run `rails server` and navigate to http://localhost:3000/.
 ### For LDAP authentication:
 - Run `rails g controller Welcome index`
 - Set `root` in ***config/routes.rb*** to `'welcome#index'`
-- Run `rails g controller Users`
-- Run `rails g model User`
 - Run `rails generate devise:install`
 - Add the following between `<body></body>` tags in ***app/views/layouts/application.html.erb***:
     - `<p class="notice"><%= notice %></p>`
     - `<p class="alert"><%= alert %></p>`
-- Run `rails generate devise User`. `User` may be replaced with any model name. May be necessary if your db already contains a 'users' table.
-- Run `rails generate devise_ldap_authenticatable:install`
+- Declaring a devise model other than 'User' may be necessary if your db already contains a 'users' table.
+  - Run `rails generate devise LdapUser`
+  - Run `rails generate devise_ldap_authenticatable:install --user-model=ldap_user`
 - Run `rails g devise:views`
 - Run `bin/rake db:migrate` to update the database
-- Run `rails server` and navigate to http://localhost:3000/users/sign_in to view the sign in page.
+- Run `rails server` and navigate to http://localhost:3000/ldap_users/sign_in to view the sign in page.
 - `Ctrl-C` to shutdown server.
 - Open ***config/ldap.yml*** and configure with appropriate credentials.
     - You may need to contact your IT department for this information.
@@ -124,7 +123,7 @@ to
 <%= f.text_field :username, autofocus: true %>
 ```
 - Note email_field became text_field to disable email authentication.
-- Modify the user model to populate the user's email and to no longer require it for validation:
+- Modify the ldap_user model to populate the user's email and to no longer require it for validation:
 ```ruby
 before_validation:get_ldap_email
 
@@ -145,7 +144,7 @@ end
     - Change `config.authentication_keys` to equal `[ :username ]`
     - Change `config.ldap_create_user` to equal `true` so all valid LDAP users will be allowed to login and an appropriate user record will be created.
     - Change `config.ldap_use_admin_to_bind` to equal `true` so the admin user will be used to bind to the LDAP server during authentication.
-- Run `rails generate migration add_username_to_users username:string:uniq` to create a migration to add a username column to the users table.
+- Run `rails generate migration add_username_to_ldap_users username:string:uniq` to create a migration to add a username column to the ldap_users table.
 - Run `rake db:migrate` to update the database with the migration.
 
 ***
@@ -153,13 +152,13 @@ end
 ### Create Sign In/Out links:
 - Create partial `_login_items.html.erb` in directory ***app/views/devise/shared/*** with the following:
 ```r
-<% if user_signed_in? %>
+<% if ldap_user_signed_in? %>
   <li>
-  <%= link_to('Sign Out', destroy_user_session_path, :method => :delete) %>        
+  <%= link_to('Sign Out', destroy_ldap_user_session_path, :method => :delete) %>        
   </li>
 <% else %>
   <li>
-  <%= link_to('Sign In', new_user_session_path)  %>  
+  <%= link_to('Sign In', new_ldap_user_session_path)  %>  
   </li>
 <% end %>
 ```
@@ -188,13 +187,13 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 	<%= link_to image_tag('stacker.png', size: '25x20'), '#', class: 'navbar-brand' %>
     <%= link_to 'Triple Stack', root_path, class: 'navbar-brand' %>
 	<ul class="nav navbar-nav pull-right">
-		<% if user_signed_in? %>
+		<% if ldap_user_signed_in? %>
 		  <li>
-		  <%= link_to('Sign Out', destroy_user_session_path, :method => :delete) %>        
+		  <%= link_to('Sign Out', destroy_ldap_user_session_path, :method => :delete) %>        
 		  </li>
 		<% else %>
 		  <li>
-		  <%= link_to('Sign In', new_user_session_path)  %>  
+		  <%= link_to('Sign In', new_ldap_user_session_path)  %>  
 		  </li>
 		<% end %>
   	</ul>
