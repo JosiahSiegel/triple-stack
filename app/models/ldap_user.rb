@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class LdapUser < ActiveRecord::Base
   before_validation:get_ldap_email
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
