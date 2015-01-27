@@ -212,5 +212,13 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 - When prompted, designate the tables that you want scaffolding generated for.
 - Scripts will be generated that you can copy and run to build the necessary scaffolding.
 
+***
+
+### SQL 2014 support:
+- Modify the activerecord-sqlserver-adapter gem in the Gemfile to the following:
+  - ```
+    gem 'activerecord-sqlserver-adapter', :git => "git://github.com/rails-sqlserver/activerecord-sqlserver-adapter.git", :branch => "4-1-stable"
+    ```
+
 [RailsInstaller]:http://railsinstaller.org/en
 [ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
