@@ -4,6 +4,18 @@
 
 Install rails: [RailsInstaller]
 
+Verify your installation by running `rails --version`
+
+If you see the error `cannot load such file -- c:/RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/rails-4.2.0/bin/rails (LoadError)` 
+or similar, do the following:
+
+- Navigate to the rails file and set the correct rails path:
+  > `C:/Users/xmr/Desktop/railsinstaller-windows/stage/Ruby2.1.0/bin/rails`
+    
+  >to
+    
+  >`C:/RailsInstaller/Ruby2.1.0/bin/rails`
+
 Build a rails app: `rails new triple-stack`
 
 If you receive the following error: `Gem::RemoteFetcher::FetchError: SSL_connect`, you will have to temporarily edit your Gemfile source to http instead of https, `cd` into `triple-stack`, and run `bundle install`.
