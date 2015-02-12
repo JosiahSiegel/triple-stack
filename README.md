@@ -1,3 +1,6 @@
+[RailsInstaller]:http://railsinstaller.org/en
+[ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
+
 # **Triple-Stack**
 
 ## Build from scratch:
@@ -256,7 +259,3 @@ production:
 
 To reference a value, use `<%= Rails.application.secrets.DOMAIN_USER %>` in a view or .yml file, or 
 `Rails.application.secrets.DOMAIN_USER` in an .rb file.
-
-
-[RailsInstaller]:http://railsinstaller.org/en
-[ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
