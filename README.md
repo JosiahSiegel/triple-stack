@@ -1,6 +1,6 @@
 # **Triple-Stack**
 
-### How to build this application from scratch:
+## Build from scratch:
 
 Install rails: [RailsInstaller]
 
@@ -10,12 +10,13 @@ If you see the error `cannot load such file -- c:/RailsInstaller/Ruby2.1.0/lib/r
 or similar, do the following:
 
 - Navigate to the rails file and set the correct rails path:
-  > `C:/Users/xmr/Desktop/railsinstaller-windows/stage/Ruby2.1.0/bin/rails`
-    
-  >to
-    
-  >`C:/RailsInstaller/Ruby2.1.0/bin/rails`
 
+>  `C:/Users/xmr/Desktop/railsinstaller-windows/stage/Ruby2.1.0/bin/rails`
+    
+>  to
+    
+>  `C:/RailsInstaller/Ruby2.1.0/bin/rails`
+ 
 Build a rails app: `rails new triple-stack`
 
 If you receive the following error: `Gem::RemoteFetcher::FetchError: SSL_connect`, you will have to temporarily edit your Gemfile source to http instead of https, `cd` into `triple-stack`, and run `bundle install`.
@@ -90,9 +91,7 @@ Run `rails server` and navigate to http://localhost:3000/.
 
 `Ctrl-C` to shutdown server.
 
-***
-
-### For LDAP authentication:
+## LDAP authentication:
 - Run `rails g controller Welcome index`
 - Set `root` in ***config/routes.rb*** to `'welcome#index'`
 - Run `rails generate devise:install`
@@ -121,9 +120,7 @@ development:
   # <<: *AUTHORIZATIONS
 ```
 
-***
-
-### To modify LDAP authentication to accept username:
+### Modify LDAP authentication to accept username:
 - Open ***app/views/devise/sessions/new.html.erb*** and change
 ```html
 <%= f.label :email %><br />
@@ -136,22 +133,23 @@ to
 ```
 - Note email_field became text_field to disable email authentication.
 - Modify the ldap_user model to populate the user's email and to no longer require it for validation:
-```ruby
-before_validation:get_ldap_email
 
-def get_ldap_email
-  array =  Devise::LDAP::Adapter.get_ldap_param(self.username, 'mail')
-  self.email = array.first
-end
-
-def email_required?
-  false
-end
-
-def email_changed?
-  false
-end
-```
+  ```ruby
+  before_validation:get_ldap_email
+  
+  def get_ldap_email
+    array =  Devise::LDAP::Adapter.get_ldap_param(self.username, 'mail')
+    self.email = array.first
+  end
+  
+  def email_required?
+    false
+  end
+  
+  def email_changed?
+    false
+  end
+  ```
 - Open ***config/initializers/devise.rb***
     - Change `config.authentication_keys` to equal `[ :username ]`
     - Change `config.ldap_create_user` to equal `true` so all valid LDAP users will be allowed to login and an appropriate user record will be created.
@@ -159,9 +157,7 @@ end
 - Run `rails generate migration add_username_to_ldap_users username:string:uniq` to create a migration to add a username column to the ldap_users table.
 - Run `rake db:migrate` to update the database with the migration.
 
-***
-
-### Create Sign In/Out links:
+## Sign In/Out links:
 - Create partial `_login_items.html.erb` in directory ***app/views/devise/shared/*** with the following:
 ```r
 <% if ldap_user_signed_in? %>
@@ -176,9 +172,7 @@ end
 ```
 - In ***app/views/layouts/application.html.erb***, add `<%= render 'devise/shared/login_items' %>` above `<%= yield %>` to display the sign in/out links.
 
-***
-
-### Add Bootstrap styling & Font Awesome icons:
+## Bootstrap styling & Font Awesome icons:
 - In directory ***app/assets/stylesheets/***, rename file ***application.css*** to ***application.css.scss***.
 - Add the following to ***application.css.scss***:
 ```css
@@ -213,9 +207,7 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 ```
 - Place your brand image under ***app/assets/images/***.
 
-***
-
-### Build on a preexisting database:
+## Build on a preexisting database:
 - Open your Gemfile and add `gem 'schema_to_scaffold'`
 - Run `bundle install`
 - Run `scaffold`
@@ -224,13 +216,45 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 - When prompted, designate the tables that you want scaffolding generated for.
 - Scripts will be generated that you can copy and run to build the necessary scaffolding.
 
-***
-
-### SQL 2014 support:
+## SQL 2014 support:
 - Modify the activerecord-sqlserver-adapter gem in the Gemfile to the following:
-  - ```
+   ```
     gem 'activerecord-sqlserver-adapter', :git => "git://github.com/rails-sqlserver/activerecord-sqlserver-adapter.git", :branch => "4-1-stable"
     ```
+    
+## Secrets:
+The .gitignore file should contain `config/secrets.yml`, to prevent sensitive information from being stored in the repository.
+
+Example `secrets.yml`:
+```yml
+development:
+  secret_key_base: XXXXX
+  LDAP_SECRET: XXX
+  LDAP_USER: "CN=Test User,OU=City,OU=XXXX Users,DC=xxxx,DC=local"
+  LDAP_HOST: XXXX.xxxx.local
+  LDAP_BASE: "DC=xxxx,DC=local"
+  DOMAIN_USER: XXXX\user
+
+test:
+  secret_key_base: XXXXX
+  LDAP_SECRET: XXX
+  LDAP_USER: "CN=Test User,OU=City,OU=XXXX Users,DC=xxxx,DC=local"
+  LDAP_HOST: XXXX.xxxx.local
+  LDAP_BASE: "DC=xxxx,DC=local"
+  DOMAIN_USER: XXXX\user
+
+# Do not keep production secrets in the repository,
+# instead read values from the environment.
+production:
+  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
+  LDAP_SECRET: <%= ENV["LDAP_SECRET"] %>
+  LDAP_USER: "CN=Test User,OU=City,OU=XXXX Users,DC=xxxx,DC=local"
+  LDAP_HOST: XXXX.xxxx.local
+  LDAP_BASE: "DC=xxxx,DC=local"
+  DOMAIN_USER: XXXX\user
+```
+To reference a value, use `<%= Rails.application.secrets.DOMAIN_USER %>` in a view or .yml file, or 
+`Rails.application.secrets.DOMAIN_USER` in an .rb file.
 
 [RailsInstaller]:http://railsinstaller.org/en
 [ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
