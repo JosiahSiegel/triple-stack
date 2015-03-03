@@ -1,6 +1,9 @@
 [RailsInstaller]:http://railsinstaller.org/en
 [ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
 [secrets_demo.yml]:https://github.com/josiah85/triple-stack/blob/master/config/secrets_demo.yml
+[secrets]:https://github.com/josiah85/triple-stack#secrets
+[Puma]:https://github.com/puma/puma
+[rails-disco]:https://github.com/hicknhack-software/rails-disco/wiki/Installing-puma-on-windows
 
 # **Triple-Stack**
 
@@ -25,7 +28,7 @@ Build a rails app: `rails new triple-stack`
 
 If you receive the following error: `Gem::RemoteFetcher::FetchError: SSL_connect`, you will have to temporarily edit your Gemfile source to http instead of https, `cd` into `triple-stack`, and run `bundle install`.
 
-To run your new application, run `rails server` and navigate to http://localhost:3000/.
+To view your new application, run `rails server` and navigate to http://localhost:3000/.
 You will see the error " **Could not load 'active_record/connection_adapters/sqlite3_adapter'** ".
 
 `Ctrl-C` to shutdown server.
@@ -39,9 +42,16 @@ gem 'devise_ldap_authenticatable'
 
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'font-awesome-rails'
+
+gem 'puma'
 ```
 
-and change the rails gem version to `'4.1.9'`. You will then need to run `bundle update`, comment out `config.active_record.raise_in_transactional_callbacks = true` in ***config/application.rb***, and replace the content in your ***app/config/database.yml*** file to the following:
+- change the rails gem version to `'4.1.9'`.
+- run `bundle update`
+- comment out `config.active_record.raise_in_transactional_callbacks = true` in ***config/application.rb***
+- Create a [secrets] file.
+- replace the content in your ***app/config/database.yml*** file to the following:
+
 ```ruby
 default: &default
   adapter: sqlserver
@@ -240,3 +250,39 @@ See file [secrets_demo.yml]
 
 To reference a value, use `<%= Rails.application.secrets.DOMAIN_USER %>` in a view or .yml file, or 
 `Rails.application.secrets.DOMAIN_USER` in an .rb file.
+
+##Deployment Setup ([Puma]):
+
+#####Steps for windows installation:
+
+1. Install Ruby DevKit, e.g. in `c:\devkit`
+2. Unpack an OpenSSL Package in `c:\openssl`
+3. You need to copy the ddls from the bin directory (`libeay32.dll` and `ssleay32.dll`) to your `ruby/bin` directory.
+4. Open a windows console
+5. Initialize the DevKit build environment
+  `c:\devkit\devkitvars.bat`
+6. `git clone` repo
+7. `cd triple-stack`
+8. Now it's possible to install the puma gem with the OpenSSL packages
+  `gem install puma -v '2.11.0' --source http://www.rubygems.org -- --with-opt-dir="c:\openssl"`
+9. `bundle install`
+10. `puma -v` to verify installation
+11. Add `config/secrets.yml`
+12. `bundle exec rails s Puma`
+
+reference: [rails-disco]
+
+#####Steps for Linux installation:
+
+1. `git clone` repo
+2. `sudo chown -R $(whoami):$(whoami) triple-stack` to claim ownership of repo
+3. `sudo apt-get install freetds-dev` or `sudo yum install freetds-devel` to install dependencies for gem tiny_tds
+4. `cd triple-stack`
+5. `bundle install`
+6. Add `config/secrets.yml`
+7. `bundle exec rails s Puma`
+
+#####VirtualBox installation:
+
+1. Settings>Network>"NAT" to "Bridged Adapter"
+2. Follow Linux installation

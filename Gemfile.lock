@@ -85,6 +85,8 @@ GEM
     multi_json (1.10.1)
     net-ldap (0.5.1)
     orm_adapter (0.5.0)
+    puma (2.11.1)
+      rack (>= 1.1, < 2.0)
     rack (1.5.2)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -164,6 +166,7 @@ DEPENDENCIES
   font-awesome-rails
   jbuilder (~> 2.0)
   jquery-rails
+  puma
   rails (= 4.1.9)
   sass-rails (~> 5.0)
   schema_to_scaffold
