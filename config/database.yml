@@ -6,35 +6,31 @@
 #
 default: &default
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: test
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
   username: <%= Rails.application.secrets.DOMAIN_USER %>
-  password: <%= Rails.application.secrets.LDAP_SECRET %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 
 development:
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: test
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
   username: <%= Rails.application.secrets.DOMAIN_USER %>
-  password: <%= Rails.application.secrets.LDAP_SECRET %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: test
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
   username: <%= Rails.application.secrets.DOMAIN_USER %>
-  password: <%= Rails.application.secrets.LDAP_SECRET %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 
 production:
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: test
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
   username: <%= Rails.application.secrets.DOMAIN_USER %>
-  password: <%= Rails.application.secrets.LDAP_SECRET %>
+  password: <%= Rails.application.secrets.DB_SECRET %>

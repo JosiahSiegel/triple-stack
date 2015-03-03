@@ -1,5 +1,6 @@
 [RailsInstaller]:http://railsinstaller.org/en
 [ODBC Driver]:http://www.microsoft.com/en-us/download/details.aspx?id=36434
+[secrets_demo.yml]:https://github.com/josiah85/triple-stack/blob/master/config/secrets_demo.yml
 
 # **Triple-Stack**
 
@@ -32,7 +33,6 @@ You will see the error " **Could not load 'active_record/connection_adapters/sql
 Open your Gemfile, remove `gem 'sqlite3'`, and add the following gems:
 ```ruby
 gem 'tiny_tds'
-gem 'ruby-odbc'
 gem 'activerecord-sqlserver-adapter'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
@@ -45,50 +45,58 @@ and change the rails gem version to `'4.1.9'`. You will then need to run `bundle
 ```ruby
 default: &default
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: XXXX
-  username: XXXX
-  password: XXXX
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
+  username: <%= Rails.application.secrets.DOMAIN_USER %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 
 development:
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: XXXX
-  username: XXXX
-  password: XXXX
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
+  username: <%= Rails.application.secrets.DOMAIN_USER %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: XXXX
-  username: XXXX
-  password: XXXX
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
+  username: <%= Rails.application.secrets.DOMAIN_USER %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 
 production:
-  adapter: sqlserver
-  dsn: local_sqlserver
-  mode: odbc
-  database: XXXX
-  username: XXXX
-  password: XXXX
+  dataserver: <%= Rails.application.secrets.DB_HOST %>
+  database: <%= Rails.application.secrets.DB_NAME %>
+  username: <%= Rails.application.secrets.DOMAIN_USER %>
+  password: <%= Rails.application.secrets.DB_SECRET %>
 ```
 
-To create an odbc connection in Windows: 
-- Open up the **Control Panel** 
-- Click on **Administrative Tools** 
-- Open **Data Sources (ODBC)**
-- Select the tab **User DSN** 
-- Click **Add**
-- Select **ODBC Driver 11 for SQL Server**
+*Optional*
 
-If this driver is not available, you will have to download it here: [ODBC Driver].
-Once your ODBC connection is configured and you are able to successfully test the connection, you will then be able to add the name of the connection to `dsn` in you ***config/database.yml*** file.
+>To create an odbc connection in Windows: 
+>- Add gem `ruby-odbc` and run `bundle install`
+>- Open up the **Control Panel** 
+>- Click on **Administrative Tools** 
+>- Open **Data Sources (ODBC)**
+>- Select the tab **User DSN** 
+>- Click **Add**
+>- Select **ODBC Driver 11 for SQL Server**
+>
+>If this driver is not available, you will have to download it here: [ODBC Driver].
+>Once your ODBC connection is configured and you are able to successfully test the connection, you will then be able to add the name of the connection to `dsn` in your ***config/database.yml*** file.
+>
+>In ***config/database.yml***, change your datasource to look like the following:
+>```ruby
+>  adapter: sqlserver
+>  dsn: local_sqlserver
+>  mode: odbc
+>  database: XXXX
+>  username: XXXX
+>  password: XXXX
+>```
 
 Run `rails server` and navigate to http://localhost:3000/. 
 
@@ -228,34 +236,7 @@ Rails.application.config.assets.precompile += %w( fontawesome-webfont.svg )
 ## Secrets:
 The .gitignore file should contain `config/secrets.yml`, to prevent sensitive information from being stored in the repository.
 
-Example `secrets.yml`:
-```yml
-development:
-  secret_key_base: XXXXX
-  LDAP_SECRET: XXX
-  LDAP_USER: "CN=Test User,OU=City,OU=XXXX Users,DC=xxxx,DC=local"
-  LDAP_HOST: XXXX.xxxx.local
-  LDAP_BASE: "DC=xxxx,DC=local"
-  DOMAIN_USER: XXXX\user
-
-test:
-  secret_key_base: XXXXX
-  LDAP_SECRET: XXX
-  LDAP_USER: "CN=Test User,OU=City,OU=XXXX Users,DC=xxxx,DC=local"
-  LDAP_HOST: XXXX.xxxx.local
-  LDAP_BASE: "DC=xxxx,DC=local"
-  DOMAIN_USER: XXXX\user
-
-# Do not keep production secrets in the repository,
-# instead read values from the environment.
-production:
-  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
-  LDAP_SECRET: <%= ENV["LDAP_SECRET"] %>
-  LDAP_USER: "CN=Test User,OU=City,OU=XXXX Users,DC=xxxx,DC=local"
-  LDAP_HOST: XXXX.xxxx.local
-  LDAP_BASE: "DC=xxxx,DC=local"
-  DOMAIN_USER: XXXX\user
-```
+See file [secrets_demo.yml]
 
 To reference a value, use `<%= Rails.application.secrets.DOMAIN_USER %>` in a view or .yml file, or 
 `Rails.application.secrets.DOMAIN_USER` in an .rb file.
